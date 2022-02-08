@@ -5,7 +5,7 @@
 #else
 #include <windows.h>
 #endif
-#include "SharedStructs.h"
+#include "SharedStructs.h" // ja inclui <stdio.h> / <thread> / <mutex> / <vector>
 #include <processthreadsapi.h>
 #include <iostream>
 

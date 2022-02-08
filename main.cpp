@@ -33,6 +33,8 @@ condition_variable dataCond; // VAR GLOBAL
 void  readData(const int exec_time, const float sample_time, std::mutex &mtx, float &shared_data);
 void writeData(const int exec_time, const float sample_time, std::mutex &mtx, float &shared_data);
 void printData(const int exec_time, const float sample_time, std::mutex &mtx, float &shared_data);
+void readDataStrct(const ThrdStruct &data_struct);
+void writeDataStrct(const ThrdStruct &data_struct);
 void printDataStrct(const ThrdStruct &data_struct);
 
 int main(int argc, char* argv[]) 
@@ -76,9 +78,11 @@ int main(int argc, char* argv[])
     p_struct.mtx_ = &imuMutex;
 
 
-    thread thWriting(writeData,  duration, WRT_TS, std::ref(imuMutex), std::ref(clock_value));
-    thread thReading(readData,   duration, RED_TS, std::ref(imuMutex), std::ref(clock_value));
+    // thread thWriting(writeData,  duration, WRT_TS, std::ref(imuMutex), std::ref(clock_value));
+    // thread thReading(readData,   duration, RED_TS, std::ref(imuMutex), std::ref(clock_value));
     // thread thPrinting(printData, duration, PRT_TS, std::ref(imuMutex), std::ref(clock_value));
+    thread thWriting(writeDataStrct, std::ref(w_struct));
+    thread thReading(readDataStrct, std::ref(r_struct));
     thread thPrinting(printDataStrct, std::ref(p_struct));
 
     thWriting.join();
