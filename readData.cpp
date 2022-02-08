@@ -66,7 +66,7 @@ void readDataStrct(const ThrdStruct &data_struct){
     using namespace std;
     using namespace Eigen;
 
-    SetThreadPriority(GetCurrentThread(), -2);
+    SetThreadPriority(GetCurrentThread(), data_struct.param00_);
     looptimer readTimer(data_struct.sampletime_);
 
     FILE* pLogFile;

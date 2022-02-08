@@ -36,7 +36,7 @@ void writeData(const int exec_time, const float sample_time, std::mutex &mtx, fl
 void writeDataStrct(const ThrdStruct &data_struct){
     using namespace std;
 
-    SetThreadPriority(GetCurrentThread(), -1);
+    SetThreadPriority(GetCurrentThread(), data_struct.param00_);
     looptimer writeTimer(data_struct.sampletime_);
     
     auto exec_time_micros = data_struct.exectime_*MILLION;

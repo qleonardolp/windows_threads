@@ -35,7 +35,7 @@ void printData(const int exec_time, const float sample_time, std::mutex &mtx, fl
 void printDataStrct(const ThrdStruct &data_struct){
     using namespace std;
 
-    SetThreadPriority(GetCurrentThread(), -1);
+    SetThreadPriority(GetCurrentThread(), data_struct.param00_);
     looptimer th_timer(data_struct.sampletime_);
     
     const long long int exec_time_micros = data_struct.exectime_*MILLION;
