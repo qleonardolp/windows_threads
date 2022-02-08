@@ -1,18 +1,15 @@
 // C/C++ threads/mutex practice | @qleonardolp, 2022
-// Essa ta braaaaba! com processthreadsapi ainda mais braba!!
+// The 'brabest'!
 
 #ifdef _WIN32
 #include "QpcLoopTimer.h" // ja inclui <windows.h>
 #else
 #include <windows.h>
 #endif
-
-#include <stdio.h>
-#include <iostream>
-#include <processthreadsapi.h>
+#include "SharedStructs.h" // ja inclui <stdio.h> / <thread> / <mutex> / <vector>
 #include <condition_variable>
-#include <thread>
-#include <mutex>
+#include <processthreadsapi.h>
+#include <iostream>
 #include <chrono>
 #include <ctime>
 #include <time.h>
@@ -36,6 +33,7 @@ condition_variable dataCond; // VAR GLOBAL
 void  readData(const int exec_time, const float sample_time, std::mutex &mtx, float &shared_data);
 void writeData(const int exec_time, const float sample_time, std::mutex &mtx, float &shared_data);
 void printData(const int exec_time, const float sample_time, std::mutex &mtx, float &shared_data);
+void printDataStrct(const ThrdStruct &data_struct);
 
 int main(int argc, char* argv[]) 
 {
@@ -44,7 +42,7 @@ int main(int argc, char* argv[])
     auto qpcFrequency = double(Frequency.QuadPart);
 
     int duration;
-    if (argc > 0){
+    if (argc >= 2){
         duration = atoi(argv[1]);
     }
     else{
@@ -60,9 +58,28 @@ int main(int argc, char* argv[])
         printf("Process priority class: %lu \n", dwPriority);
     }
 
+    ThrdStruct w_struct, r_struct, p_struct;
+
+    w_struct.exectime_ = duration;
+    w_struct.sampletime_ = WRT_TS;
+    w_struct.data_ = &clock_value;
+    w_struct.mtx_ = &imuMutex;
+
+    r_struct.exectime_ = duration;
+    r_struct.sampletime_ = RED_TS;
+    r_struct.data_ = &clock_value;
+    r_struct.mtx_ = &imuMutex;
+
+    p_struct.exectime_ = duration;
+    p_struct.sampletime_ = PRT_TS;
+    p_struct.data_ = &clock_value;
+    p_struct.mtx_ = &imuMutex;
+
+
     thread thWriting(writeData,  duration, WRT_TS, std::ref(imuMutex), std::ref(clock_value));
     thread thReading(readData,   duration, RED_TS, std::ref(imuMutex), std::ref(clock_value));
-    thread thPrinting(printData, duration, PRT_TS, std::ref(imuMutex), std::ref(clock_value));
+    // thread thPrinting(printData, duration, PRT_TS, std::ref(imuMutex), std::ref(clock_value));
+    thread thPrinting(printDataStrct, std::ref(p_struct));
 
     thWriting.join();
     thReading.join();
