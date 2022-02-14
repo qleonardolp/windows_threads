@@ -55,6 +55,14 @@ int main(int argc, char* argv[])
         printf("Process priority class: %lu \n", dwPriority);
     }
 
+    cout << "//////////////////////////////////////////\\/////////\\/"   << endl;
+    cout << "// INTERFACE DE CONTROLE EXO-TAU  /       /\\     ////\\"   << endl;
+    cout << "// EESC-USP                      / _____ ___  ___  //|"     << endl;
+    cout << "// RehabLab                     /  | |  | . \\/   \\  /|"   << endl;
+    cout << "// *Copyright 2021-2026* \\//// //  | |   \\ \\   |_|  /|"  << endl;
+    cout << "//\\///////////////////////\\// //// \\_'_/\\_`_/__|   ///" << endl;
+    cout << "///\\///////////////////////\\ //////////////////\\/////\\" << endl;
+
     mutex imu_mtx;
     float shared_data = 0;
     ThrdStruct w_struct, r_struct, p_struct;
