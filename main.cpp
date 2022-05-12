@@ -10,6 +10,8 @@
 #include <processthreadsapi.h>
 #include <iostream>
 
+#define TEST
+
 #define MAIN_RUNTIME 60 // [s]
 // Tasks Sample Time:
 #define RED_TS 0.004    // [s]
@@ -30,6 +32,7 @@ void printDataStrct(const ThrdStruct &data_struct);
 
 int main(int argc, char* argv[]) 
 {
+#ifndef TEST
     using namespace std;
     // Starting program time counter:
     LARGE_INTEGER StartingTime, EndingTime;
@@ -98,5 +101,8 @@ int main(int argc, char* argv[])
     ElapsedMicroseconds.QuadPart = EndingTime.QuadPart - StartingTime.QuadPart;
     auto qpcElapsedSeconds = double(ElapsedMicroseconds.QuadPart)/qpcFrequency;
     cout << "Elapsed time [s]: " << qpcElapsedSeconds << endl;
+#else
+    system("PAUSE"); // faz nada, teste do Curso Linguagem C - WR Kits!
+#endif
     return 0;
 }
