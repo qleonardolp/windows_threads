@@ -10,15 +10,12 @@
 #include <processthreadsapi.h>
 #include <iostream>
 
-#define MAIN_RUNTIME 60 // [s]
+#define MAIN_RUNTIME 5 // [s]
 // Tasks Sample Time:
-#define RED_TS 0.004    // [s]
-#define WRT_TS 0.001    // [s]
+#define RED_TS 0.050    // [s]
+#define WRT_TS 0.010    // [s]
 #define PRT_TS 2.000    // [s]
-// Tasks Threads Priority:
-#define RED_PRTY -2  // Read  SetThreadPriority
-#define WRT_PRTY -1  // Write SetThreadPriority
-#define PRT_PRTY -1  // Print SetThreadPriority
+
 
 // Functions Prototypes; Thier definitions are on the proper files.
 void  readData(const int exec_time, const float sample_time, std::mutex &mtx, float &shared_data);
@@ -47,7 +44,7 @@ int main(int argc, char* argv[])
     }
 
     DWORD dwPriority, dwError;
-    if (!SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS)){
+    if (!SetPriorityClass(GetCurrentProcess(), ABOVE_NORMAL_PRIORITY_CLASS)){
         dwError = GetLastError();
         printf("Error %lu! \n", dwError);
     } else{
@@ -68,19 +65,19 @@ int main(int argc, char* argv[])
     ThrdStruct w_struct, r_struct, p_struct;
 
     w_struct.exectime_ = duration;
-    w_struct.param00_ =  WRT_PRTY;
+    w_struct.param00_ =  THREAD_PRIORITY_ABOVE_NORMAL;
     w_struct.sampletime_ = WRT_TS;
     w_struct.data_ = &shared_data;
     w_struct.mtx_ = &imu_mtx;
 
     r_struct.exectime_ = duration;
-    r_struct.param00_ =  RED_PRTY;
+    r_struct.param00_ =  THREAD_PRIORITY_NORMAL;
     r_struct.sampletime_ = RED_TS;
     r_struct.data_ = &shared_data;
     r_struct.mtx_ = &imu_mtx;
 
     p_struct.exectime_ = duration;
-    p_struct.param00_ =  PRT_PRTY;
+    p_struct.param00_ =  THREAD_PRIORITY_LOWEST;
     p_struct.sampletime_ = PRT_TS;
     p_struct.data_ = &shared_data;
     p_struct.mtx_ = &imu_mtx;
